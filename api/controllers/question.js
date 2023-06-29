@@ -73,15 +73,15 @@ module.exports.GET_ALL_QUESTIONS = async (req, res) => {
 
 module.exports.DELETE_QUESTION = async (req, res) => {
   try {
-    const question = await QuestionModel.findOneAndDelete({id: req.params.id});
+    const deleteQuestion = await QuestionModel.findOneAndDelete({id: req.params.id});
     
-    if(!question) {
+    if(!deleteQuestion) {
       return res.status(404).json({response: 'Question not found'});
     }
 
     UserModel.updateOne(
       { id: req.body.userId },
-      { $pull: { askedQuestionsIds: question.id } }
+      { $pull: { askedQuestionsIds: deleteQuestion.id } }
     ).exec();
 
     return res.status(200).json({response: 'Question deleted successfully'});
