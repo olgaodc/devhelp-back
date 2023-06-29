@@ -45,6 +45,17 @@ module.exports.LOG_IN = async (req, res) => {
       return res.status(401).json({ response: 'Invalid email or password' });
     };
 
+    const userInfo = await UserModel.aggregate([
+      {
+        $lookup: {
+          from: 'questions',
+          localField: 'askedQuestionsIds',
+          foreignField: 'id',
+          as: 'askedQuestions',
+        }
+      }, {$match: {id: user.id}}
+    ]).exec();
+
     bcrypt.compare(req.body.password, user.password, (err, isPasswordMatch) => {
       if (isPasswordMatch) {
         const token = jwt.sign({
@@ -65,7 +76,7 @@ module.exports.LOG_IN = async (req, res) => {
           { algorithm: "RS256" }
         );
 
-        return res.status(200).json({ response: "You logged in", jwt: token, refreshJwt: refreshToken });
+        return res.status(200).json({user: userInfo, jwt: token, refreshJwt: refreshToken });
       } else {
         return res.status(404).json({ response: 'Invalid email or password' });
       }
