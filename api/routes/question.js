@@ -9,8 +9,8 @@ const {
 } = require('../controllers/question');
 
 router.post('/question', authMiddleware, ADD_QUESTION);
-router.get('/question/:id', authMiddleware, GET_QUESTION);
-router.get('/questions', authMiddleware, GET_ALL_QUESTIONS);
+router.get('/question/:id', GET_QUESTION);
+router.get('/questions', GET_ALL_QUESTIONS);
 router.delete('/question/:id', authMiddleware, DELETE_QUESTION);
 
 module.exports = router;

@@ -1,12 +1,12 @@
 const uniqid = require('uniqid');
 const QuestionModel = require("../models/question");
-const userModel = require("../models/user");
 const UserModel = require("../models/user");
 
 module.exports.ADD_QUESTION = async (req, res) => {
   try {
     const question = new QuestionModel({
       text: req.body.text,
+      description: req.body.description,
       id: uniqid(),
       creationDate: new Date(),
       answersIds: [],

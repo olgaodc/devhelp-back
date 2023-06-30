@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 
 module.exports.SIGN_UP = async (req, res) => {
   try {
-    const name = req.body.name;
     const email = req.body.email;
     if (!email.includes('@')) {
       return res.status(400).json({ response: 'Email should contain @' });
@@ -20,7 +19,8 @@ module.exports.SIGN_UP = async (req, res) => {
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(password, salt, async (err, hash) => {
         const user = new UserModel({
-          name: name,
+          name: req.body.name,
+          surname: req.body.surname,
           email: email,
           password: hash,
           asked_questions_ids: [],
