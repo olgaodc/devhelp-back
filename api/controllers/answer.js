@@ -19,7 +19,7 @@ module.exports.ADD_ANSWER = async (req, res) => {
       { $push: { answersIds: addedAnswer.id } }
     ).exec();
 
-    return res.status(200).json({ response: 'Answer added successfully' });
+    return res.status(200).json({ response: 'Answer added successfully', answer: addedAnswer });
 
   } catch (err) {
     console.log(err);
@@ -50,11 +50,12 @@ module.exports.ADD_ANSWER = async (req, res) => {
 
 module.exports.UPDATE_LIKES_NUMBER = async (req, res) => {
   try {
-    const updateLikesNumber = await AnswerModel.findOneAndUpdate(
+    const updatedAnswer = await AnswerModel.findOneAndUpdate(
       {id: req.params.id},
-      {likesNumber: req.body.likesNumber}
+      {likesNumber: req.body.likesNumber},
+      {new: true}
     );
-    return res.status(200).json({response: 'Likes number updated successfully'});
+    return res.status(200).json({response: 'Likes number updated successfully', answer: updatedAnswer});
   } catch (err) {
     console.log(err);
     return res.status(500).json({ response: 'Error, please try later' });

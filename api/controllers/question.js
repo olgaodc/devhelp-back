@@ -46,8 +46,6 @@ module.exports.GET_QUESTION = async (req, res) => {
       }, { $match: { id: question.id } }
     ]).exec();
 
-    console.log(questionInfo);
-
     return res.status(200).json({ question: questionInfo });
 
   } catch (err) {
