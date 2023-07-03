@@ -87,3 +87,12 @@ module.exports.LOG_IN = async (req, res) => {
   }
 }
 
+
+module.exports.CHECK_IS_USER_LOGGED_IN = async (req, res) => {
+  try {
+    res.status(200).json({loggedIn: true});
+  } catch (err) {
+    res.status(500).json({response: 'Error, please try again'});
+  }
+}
+

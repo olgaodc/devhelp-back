@@ -19,7 +19,7 @@ module.exports.ADD_QUESTION = async (req, res) => {
       { $push: { askedQuestionsIds: addedQuestion.id } }
     ).exec();
 
-    return res.status(200).json({ response: 'Question added successfully' });
+    return res.status(200).json({ response: 'Question added successfully', question: addedQuestion });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ response: 'Error, please try later' });
