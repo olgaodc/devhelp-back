@@ -1,6 +1,7 @@
 const uniqid = require('uniqid');
 const QuestionModel = require("../models/question");
 const UserModel = require("../models/user");
+const AnswerModel = require("../models/answer");
 
 module.exports.ADD_QUESTION = async (req, res) => {
   try {
@@ -71,15 +72,17 @@ module.exports.GET_ALL_QUESTIONS = async (req, res) => {
 
 module.exports.DELETE_QUESTION = async (req, res) => {
   try {
-    const deleteQuestion = await QuestionModel.findOneAndDelete({id: req.params.id});
+    const deletedQuestion = await QuestionModel.findOneAndDelete({id: req.params.id});
     
-    if(!deleteQuestion) {
+    if(!deletedQuestion) {
       return res.status(404).json({response: 'Question not found'});
     }
 
-    UserModel.updateOne(
+    await AnswerModel.deleteMany({ id: { $in: deletedQuestion.answersIds } });
+
+    await UserModel.updateOne(
       { id: req.body.userId },
-      { $pull: { askedQuestionsIds: deleteQuestion.id } }
+      { $pull: { askedQuestionsIds: deletedQuestion.id } }
     ).exec();
 
     return res.status(200).json({response: 'Question deleted successfully'});
