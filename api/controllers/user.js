@@ -67,16 +67,7 @@ module.exports.LOG_IN = async (req, res) => {
           { algorithm: 'RS256' }
         );
 
-        const refreshToken = jwt.sign({
-          email: user.email,
-          userId: user.id,
-        },
-          process.env.JWT_SECRET,
-          { expiresIn: '1d' },
-          { algorithm: "RS256" }
-        );
-
-        return res.status(200).json({user: userInfo, jwt: token, refreshJwt: refreshToken });
+        return res.status(200).json({user: userInfo, jwt: token});
       } else {
         return res.status(404).json({ response: 'Invalid email or password' });
       }
