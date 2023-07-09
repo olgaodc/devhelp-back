@@ -53,37 +53,38 @@ module.exports.LOG_IN = async (req, res) => {
           foreignField: 'id',
           as: 'askedQuestions',
         }
-      }, {$match: {id: user.id}}
+      }, { $match: { id: user.id } }
     ]).exec();
 
     bcrypt.compare(req.body.password, user.password, (err, isPasswordMatch) => {
       if (isPasswordMatch) {
-        const token = jwt.sign({
-          email: user.email,
-          userId: user.id,
-        },
+        const token = jwt.sign(
+          {
+            email: user.email,
+            userId: user.id,
+          },
           process.env.JWT_SECRET,
-          { expiresIn: '2h' },
+          { expiresIn: '12h' },
           { algorithm: 'RS256' }
         );
 
-        return res.status(200).json({user: userInfo, jwt: token});
+        return res.status(200).json({ user: userInfo, jwt: token });
       } else {
         return res.status(404).json({ response: 'Invalid email or password' });
       }
     });
   } catch (err) {
-    console.log(err); 
-    return res.status(500).json({response: 'Error, please try later'})
+    console.log(err);
+    return res.status(500).json({ response: 'Error, please try later' })
   }
 }
 
 
 module.exports.CHECK_IS_USER_LOGGED_IN = async (req, res) => {
   try {
-    res.status(200).json({loggedIn: true});
+    res.status(200).json({ loggedIn: true });
   } catch (err) {
-    res.status(500).json({response: 'Error, please try again'});
+    res.status(500).json({ response: 'Error, please try again' });
   }
 }
 
